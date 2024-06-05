@@ -51,7 +51,7 @@ export default function MyPageDetails() {
     <>
       <Navigation />
       <Container>
-        <h1 style={{ marginBlock: "1rem" }}>DELETE</h1>
+        <h1 style={{ marginBlock: "1rem" }}>CONFIRM DELETE</h1>
         <Row style={{ marginTop: "2rem" }}>
           <Col md="6">
             <Image src={image} style={{ width: "100%" }} />
@@ -61,7 +61,6 @@ export default function MyPageDetails() {
               <Card.Body>
                 <Card.Title>{catalog} / {caption}</Card.Title>
                 <Card.Text>{comment}</Card.Text>
-                <Card.Link href={`/update/${id}`}>Edit</Card.Link>
                 <Card.Link
                   onClick={() => deleteFlorist(id)}
                   style={{ cursor: "pointer" }}

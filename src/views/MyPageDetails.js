@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Image, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../firebase";
+import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import Navigation from "../components/Navigation";
 
@@ -13,8 +12,7 @@ export default function MyPageDetails() {
   const [comment, setComment] = useState("");
   const params = useParams();
   const id = params.id;
-  const [loading] = useAuthState(auth);
-
+ 
   async function getFlorist(id) {
     const floristDocument = await getDoc(doc(db, "florists", id));
     const florist = floristDocument.data();
@@ -25,9 +23,8 @@ export default function MyPageDetails() {
   }
 
   useEffect(() => {
-    if (loading) return;
-    getFlorist(id);
-  }, [id, loading]);
+     getFlorist(id);
+  }, [id]);
 
   return (
     <>
