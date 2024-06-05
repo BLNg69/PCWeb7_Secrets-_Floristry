@@ -5,7 +5,7 @@ import SignUpPage from "./views/SignUpPage";
 import MyPageAdd from "./views/MyPageAdd";
 import MyPageDetails from "./views/MyPageDetails";
 import MyPageUpdate from "./views/MyPageUpdate";
-
+import MyPageDelete from "./views/MyPageDelete";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
         <Route path="/add" element={<MyPageAdd />} />
         <Route path="/florist/:id" element={<MyPageDetails />} />
         <Route path="/update/:id" element={<MyPageUpdate />} />
-
+        <Route path="/floristdelete/:id" element={<MyPageDelete />} />
       </Routes>
     </BrowserRouter>
   );

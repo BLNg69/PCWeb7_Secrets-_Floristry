@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Image, Row } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { auth, db, storage } from "../firebase";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import Navigation from "../components/Navigation";
+import { ref, deleteObject } from "firebase/storage";
 
 export default function MyPageDetails() {
   const [catalog, setCatalog] = useState("");
@@ -13,7 +14,23 @@ export default function MyPageDetails() {
   const [comment, setComment] = useState("");
   const params = useParams();
   const id = params.id;
-  const [loading] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
+  const navigate = useNavigate();
+
+  async function deleteFlorist(id) {
+    // delete from storage
+    const floristDocument = await getDoc(doc(db, "florists", id));
+    const florist = floristDocument.data();
+    const desertRef = ref(storage, `images/${florist.imageName}`);
+    deleteObject(desertRef).then(() => {
+      console.log("deleted from firebase storage");
+    }).catch((error) => {
+      console.error(error.message);
+    });
+
+    await deleteDoc(doc(db, "florists", id));
+    navigate("/");
+  }
 
   async function getFlorist(id) {
     const floristDocument = await getDoc(doc(db, "florists", id));
@@ -26,14 +43,15 @@ export default function MyPageDetails() {
 
   useEffect(() => {
     if (loading) return;
+    if (!user) navigate("/login");
     getFlorist(id);
-  }, [id, loading]);
+  }, [id, navigate, user, loading]);
 
   return (
     <>
       <Navigation />
       <Container>
-        <h1 style={{ marginBlock: "1rem" }}>Florist Details</h1>
+        <h1 style={{ marginBlock: "1rem" }}>DELETE</h1>
         <Row style={{ marginTop: "2rem" }}>
           <Col md="6">
             <Image src={image} style={{ width: "100%" }} />
@@ -44,7 +62,12 @@ export default function MyPageDetails() {
                 <Card.Title>{catalog} / {caption}</Card.Title>
                 <Card.Text>{comment}</Card.Text>
                 <Card.Link href={`/update/${id}`}>Edit</Card.Link>
-                <Card.Link href={`/floristdelete/${id}`}>Delete</Card.Link>
+                <Card.Link
+                  onClick={() => deleteFlorist(id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  Delete
+                </Card.Link>
               </Card.Body>
             </Card>
           </Col>
