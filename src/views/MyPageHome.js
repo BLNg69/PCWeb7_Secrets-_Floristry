@@ -6,31 +6,46 @@ import { db } from "../firebase";
 import Navigation from "../components/Navigation";
 
 export default function MyPageHome() {
-  const [florists, setFlorists] = useState([]);
+  const [floristsGrouped, setFloristsGrouped] = useState({});
 
-   async function getAllFlorists() {
+  async function getAllFlorists() {
     const query = await getDocs(collection(db, "florists"));
     const florists = query.docs.map((doc) => {
       return { id: doc.id, ...doc.data() };
     });
-    setFlorists(florists);
+
+    const groupedFlorists = florists.reduce((acc, florist) => {
+      const catalog = florist.catalog;
+      if (!acc[catalog]) {
+        acc[catalog] = [];
+      }
+      acc[catalog].push(florist);
+      return acc;
+    }, {});
+
+    setFloristsGrouped(groupedFlorists);
   }
 
   useEffect(() => {
     getAllFlorists();
   }, []);
 
-  const ImagesRow = () => {
-    return florists.map((florist, index) => <ImageSquare key={index} florist={florist} />);
+  const renderImages = (catalog) => {
+    return floristsGrouped[catalog].map((florist, index) => (
+      <ImageSquare key={index} florist={florist} />
+    ));
   };
 
   return (
     <>
       <Navigation />
       <Container>
-        <Row>
-          <ImagesRow />
-        </Row>
+        {Object.keys(floristsGrouped).map((catalog, index) => (
+          <div key={index} style={{ marginBottom: "2rem" }}> 
+            <h2>{catalog}</h2>
+            <Row>{renderImages(catalog)}</Row>
+          </div>
+        ))}
       </Container>
     </>
   );
