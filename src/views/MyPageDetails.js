@@ -8,8 +8,10 @@ import Navigation from "../components/Navigation";
 import { ref, deleteObject } from "firebase/storage";
 
 export default function MyPageDetails() {
+  const [catalog, setCatalog] = useState("");
   const [caption, setCaption] = useState("");
   const [image, setImage] = useState("");
+  const [comment, setComment] = useState("");
   const params = useParams();
   const id = params.id;
   const [user, loading] = useAuthState(auth);
@@ -33,8 +35,10 @@ export default function MyPageDetails() {
   async function getFlorist(id) {
     const floristDocument = await getDoc(doc(db, "florists", id));
     const florist = floristDocument.data();
+    setCatalog(florist.catalog);
     setCaption(florist.caption);
     setImage(florist.image);
+    setComment(florist.comment)
   }
 
   useEffect(() => {
@@ -47,6 +51,7 @@ export default function MyPageDetails() {
     <>
       <Navigation />
       <Container>
+        <h1 style={{ marginBlock: "1rem" }}>Florist Details</h1>
         <Row style={{ marginTop: "2rem" }}>
           <Col md="6">
             <Image src={image} style={{ width: "100%" }} />
@@ -54,7 +59,8 @@ export default function MyPageDetails() {
           <Col>
             <Card>
               <Card.Body>
-                <Card.Text>{caption}</Card.Text>
+                <Card.Title>{catalog} / {caption}</Card.Title>
+                <Card.Text>{comment}</Card.Text>
                 <Card.Link href={`/update/${id}`}>Edit</Card.Link>
                 <Card.Link
                   onClick={() => deleteFlorist(id)}
