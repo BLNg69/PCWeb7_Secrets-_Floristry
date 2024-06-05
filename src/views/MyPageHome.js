@@ -1,32 +1,32 @@
 import { useEffect, useState } from "react";
-import { Container, Image, Nav, Navbar, Row } from "react-bootstrap";
+import { Container, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+import Navigation from "../components/Navigation";
 
-export default function PostPageHome() {
-  const [posts, setPosts] = useState([]);
+export default function MyPageHome() {
+  const [florists, setFlorists] = useState([]);
 
-   async function getAllPosts() {
-    setPosts([]);
+   async function getAllFlorists() {
+    const query = await getDocs(collection(db, "florists"));
+    const florists = query.docs.map((doc) => {
+      return { id: doc.id, ...doc.data() };
+    });
+    setFlorists(florists);
   }
 
   useEffect(() => {
-    getAllPosts();
+    getAllFlorists();
   }, []);
 
   const ImagesRow = () => {
-    return posts.map((post, index) => <ImageSquare key={index} post={post} />);
+    return florists.map((florist, index) => <ImageSquare key={index} florist={florist} />);
   };
 
   return (
     <>
-      <Navbar variant="light" bg="light">
-        <Container>
-          <Navbar.Brand href="/">Tinkergram</Navbar.Brand>
-          <Nav>
-            <Nav.Link href="/add">New Post</Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
+      <Navigation />
       <Container>
         <Row>
           <ImagesRow />
@@ -36,11 +36,11 @@ export default function PostPageHome() {
   );
 }
 
-function ImageSquare({ post }) {
-  const { image, id } = post;
+function ImageSquare({ florist }) {
+  const { image, id } = florist;
   return (
     <Link
-      to={`post/${id}`}
+      to={`florist/${id}`}
       style={{
         width: "18rem",
         marginLeft: "1rem",
