@@ -51,15 +51,22 @@ export default function MyPageUpdate() {
       <Container>
         <h1 style={{ marginBlock: "1rem" }}>Edit Florist</h1>
         <Form>
-          <Form.Group className="mb-3" controlId="catalog">
-            <Form.Label>Catalog</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="CNY"
-              value={catalog}
-              onChange={(text) => setCatalog(text.target.value)}
-            />
-          </Form.Group>
+        <Form.Group className="mb-3" controlId="catalog">
+          <Form.Label>Catalog</Form.Label>
+          <Form.Select
+            value={catalog}
+            onChange={(e) => setCatalog(e.target.value)}
+          >
+            <option value="">Select Catalog</option>
+            <option value="Baby Gift">Baby Gift</option>
+            <option value="Bridal">Bridal</option>
+            <option value="Chinese New Year">Chinese New Year</option>
+            <option value="Christmas">Christmas</option>
+            <option value="Graduation">Graduation</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Other">Other</option>
+          </Form.Select>
+        </Form.Group>
 
           <Form.Group className="mb-3" controlId="caption">
             <Form.Label>Caption</Form.Label>
