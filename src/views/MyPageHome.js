@@ -39,6 +39,7 @@ export default function MyPageHome() {
   return (
     <>
       <Navigation />
+      <h1 style={{ textAlign: "center", marginTop: "2rem" }}>My Floristry Collection</h1>
       <Container>
         {Object.keys(floristsGrouped).map((catalog, index) => (
           <div key={index} style={{ marginBottom: "2rem" }}> 
