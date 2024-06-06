@@ -5,7 +5,8 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 export default function Navigation() {
   const isHomePage = window.location.pathname === '/';
   return (
-    <Navbar variant="dark" bg="dark">
+    // <Navbar variant="dark" bg="dark">
+    <Navbar variant="dark" style={{ backgroundColor: '#6A5ACD' }}>
       <Container>
       <Navbar.Brand href="/">Secret Floristry</Navbar.Brand>
         <Nav>
